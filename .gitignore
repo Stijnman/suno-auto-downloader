@@ -1,7 +1,8 @@
-# Token file — NEVER commit your token
+# Token & state — NEVER commit
 .suno_token
+.suno_state.json
 
-# Downloaded songs directory
+# Downloaded songs
 suno_songs/
 
 # Python
