@@ -1,0 +1,25 @@
+# Token file — NEVER commit your token
+.suno_token
+
+# Downloaded songs directory
+suno_songs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
