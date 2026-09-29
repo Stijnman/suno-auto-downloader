@@ -1,4 +1,4 @@
-name: Test Competitor Researcher
+name: Suno Downloader Python CI
 
 on:
   push:
@@ -11,46 +11,25 @@ permissions:
   pull-requests: read
 
 jobs:
-  validate:
-    name: Validate
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: TypeScript type check
-        run: npx tsc --noEmit
-        
-      - name: Lint check
-        run: npm run lint || echo "Linting completed"
-
   test:
-    name: Run Tests
+    name: Python tests (${{ matrix.python }})
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: '20'
-          
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: Run tests
-        run: npm test || echo "Tests completed"
+          python-version: ${{ matrix.python }}
+      - name: Install runtime dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Validate Python syntax
+        run: python -m compileall -q suno_downloader.py
+      - name: Run behavior tests
+        run: python -m unittest discover -s tests -v
 
   lint:
     name: Lint Documentation
@@ -94,13 +73,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
         
       - name: Check for hardcoded secrets
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@dc2edce2b667ca9bb1b1821d673b2385a491ff73
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
           extra_args: --debug --only-verified --fail
 
   pre-commit:
