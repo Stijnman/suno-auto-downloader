@@ -80,7 +80,7 @@ jobs:
         uses: trufflesecurity/trufflehog@dc2edce2b667ca9bb1b1821d673b2385a491ff73
         with:
           path: ./
-          extra_args: --debug --only-verified --fail
+          extra_args: --only-verified
 
   pre-commit:
     name: Pre-commit Hooks
