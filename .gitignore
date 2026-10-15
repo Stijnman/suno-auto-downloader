@@ -76,6 +76,9 @@ secrets/
 credentials/
 .api_keys
 
+# Downloader state — may persist session/auth material
+.suno_state.json
+
 # Markdown temporary
 .markdownlint
 
